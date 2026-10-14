@@ -9,6 +9,7 @@ const bookingRoutes = require("./routes/bookings");
 const dashboardRoutes = require("./routes/dashboard");
 const adminRoutes = require("./routes/admin");
 const billingRoutes = require("./routes/billing");
+const foodRoutes = require("./routes/food");
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use("/api/billing", billingRoutes);
+
+app.use("/api/food", foodRoutes);
 
 
 const PORT = 3000;
