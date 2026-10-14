@@ -4,351 +4,710 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Food Ordering</title>
+
+    <title>Grand Hotel | Food Ordering</title>
+
+    <!-- Luxury fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
 
     <style>
+        :root {
+            --navy: #0B1739;
+            --navy-light: #14264F;
+            --navy-card: #101F43;
+            --gold: #C9A64C;
+            --gold-light: #E8C46A;
+            --white: #FFFFFF;
+            --muted: #C4CBDA;
+            --success: #8EE0AE;
+            --danger: #FF9B9B;
+        }
+
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fa;
-            color: #222;
+            font-family: 'Poppins', sans-serif;
+            background:
+                radial-gradient(ellipse at top, #1A2D59 0%, transparent 55%),
+                var(--navy);
+            color: var(--white);
+            min-height: 100vh;
         }
 
-        header {
-            background: #172554;
-            color: white;
-            padding: 22px;
+        button, input, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        .top-bar {
+            background: rgba(7, 17, 43, 0.95);
+            border-bottom: 1px solid var(--gold);
+            padding: 17px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            font-size: 23px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .cart-count {
+            color: var(--navy);
+            background: var(--gold);
+            border-radius: 25px;
+            padding: 9px 17px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .hero {
             text-align: center;
+            padding: 65px 20px 45px;
+            max-width: 950px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: var(--gold-light);
+            letter-spacing: 5px;
+            font-size: 11px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(30px, 5vw, 52px);
+            font-weight: 500;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            margin-bottom: 22px;
+        }
+
+        .luxury-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(25px, 4vw, 37px);
+            color: var(--gold-light);
+            line-height: 1.5;
+            max-width: 800px;
+            margin: 0 auto 22px;
+        }
+
+        .hero-description {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .gold-line {
+            height: 1px;
+            width: 100px;
+            background: var(--gold);
+            margin: 25px auto;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 25px auto;
-            padding: 15px;
+            width: min(1150px, 92%);
+            margin: 0 auto 60px;
         }
 
-        .details, .cart {
-            background: white;
-            padding: 22px;
-            margin-bottom: 22px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #00000012;
+        .section-heading {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            font-size: clamp(23px, 3vw, 32px);
+            font-weight: 500;
+            color: var(--gold-light);
+            margin-bottom: 12px;
         }
 
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .section-description {
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 28px;
         }
 
-        .menu {
+        .menu-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .menu-tab {
+            border: 1px solid var(--gold);
+            background: var(--navy-light);
+            color: var(--white);
+            border-radius: 10px;
+            padding: 18px 8px;
+            transition: 0.25s ease;
+        }
+
+        .menu-tab:hover,
+        .menu-tab.active {
+            background: var(--gold);
+            color: var(--navy);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px #00000030;
+        }
+
+        .tab-icon {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .tab-name {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tab-time {
+            display: block;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .menu-panel {
+            background: rgba(11, 23, 57, 0.6);
+            border: 1px solid #C9A64C65;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 35px;
+        }
+
+        .menu-panel h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            font-size: 23px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .menu-panel > p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 24px;
+        }
+
+        .food-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 18px;
         }
 
-        .food {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #00000012;
+        .food-card {
+            background: linear-gradient(145deg, #172A53, #0D1938);
+            border: 1px solid #C9A64C55;
+            border-radius: 13px;
+            padding: 23px;
+            transition: transform 0.25s, border-color 0.25s;
+            display: flex;
+            flex-direction: column;
+            min-height: 225px;
         }
 
-        .food h3 {
-            margin-top: 0;
-            color: #172554;
+        .food-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-light);
         }
 
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #15803d;
+        .food-category {
+            color: var(--gold-light);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
         }
 
-        button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 11px 16px;
+        .food-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .food-description {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 17px;
+        }
+
+        .food-bottom {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .food-price {
+            color: var(--gold-light);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .gold-button {
+            border: 1px solid var(--gold);
+            border-radius: 7px;
+            background: var(--gold);
+            color: var(--navy);
+            padding: 11px 15px;
+            font-weight: 600;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .gold-button:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        .outline-button {
+            border: 1px solid var(--gold);
+            border-radius: 7px;
+            background: transparent;
+            color: var(--gold-light);
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .outline-button:hover {
+            background: var(--navy-light);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--gold-light);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 7px;
+            border: 1px solid #C9A64C70;
+            background: #09152F;
+            color: var(--white);
+        }
+
+        .form-group input::placeholder {
+            color: #8792A9;
+        }
+
+        .cart-list {
+            margin: 20px 0;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--muted);
+            padding: 25px 5px;
+            font-size: 13px;
+        }
+
+        .cart-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            gap: 14px;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #C9A64C35;
+        }
+
+        .cart-item-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            color: var(--gold-light);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-controls button {
+            width: 29px;
+            height: 29px;
             border-radius: 6px;
-            cursor: pointer;
-            margin-top: 8px;
         }
 
-        button:hover {
-            background: #1d4ed8;
+        .quantity-number {
+            min-width: 15px;
+            text-align: center;
+            font-size: 13px;
         }
 
-        .remove {
-            background: #dc2626;
+        .remove-button {
+            border: 0;
+            background: transparent;
+            color: var(--danger);
+            font-size: 11px;
+            padding: 5px;
         }
 
-        .remove:hover {
-            background: #b91c1c;
-        }
-
-        .cart-item {
+        .cart-total {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        #message {
-            font-weight: bold;
+            border-top: 1px solid var(--gold);
+            padding-top: 20px;
             margin-top: 15px;
         }
 
-        @media (max-width: 600px) {
-            .cart-item {
-                align-items: flex-start;
-                flex-direction: column;
+        .cart-total span:first-child {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            font-size: 16px;
+        }
+
+        .total-amount {
+            font-size: 23px;
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        .place-order {
+            width: 100%;
+            margin-top: 22px;
+            padding: 15px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        #message {
+            margin-top: 18px;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .success {
+            color: var(--success);
+        }
+
+        .error {
+            color: var(--danger);
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--gold-light);
+            padding: 25px;
+        }
+
+        .site-footer {
+            text-align: center;
+            border-top: 1px solid #C9A64C55;
+            padding: 30px 15px;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .site-footer span {
+            color: var(--gold-light);
+        }
+
+        @media (max-width: 650px) {
+            .top-bar {
+                padding: 15px 5%;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .hero {
+                padding: 45px 20px 35px;
+            }
+
+            .menu-tabs {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .menu-panel {
+                padding: 17px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .cart-row {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
+            .remove-button {
+                grid-column: 1 / -1;
+                justify-self: start;
             }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>🍽️ Hotel Food Ordering</h1>
-        <p>Choose your favourite food and place your order</p>
-    </header>
 
-    <main class="container">
-        <section class="details">
-            <h2>Customer Details</h2>
-
-            <label for="customerName">Customer Name</label>
-            <input id="customerName" type="text"
-                   placeholder="Enter your name" required>
-
-            <label for="orderType">Order Type</label>
-            <select id="orderType">
-                <option value="Room Service">Room Service</option>
-                <option value="Restaurant">Restaurant</option>
-                <option value="Takeaway">Takeaway</option>
-            </select>
-
-            <label for="roomNumber">Room Number (for room service)</label>
-            <input id="roomNumber" type="text"
-                   placeholder="Enter room number">
-        </section>
-
-        <h2>Our Menu</h2>
-        <div id="menu" class="menu">
-            <p>Loading menu...</p>
+    <header class="top-bar">
+        <div>
+            <div class="brand">GRAND HOTEL</div>
+            <div class="brand-subtitle">LUXURY • COMFORT • EXCELLENCE</div>
         </div>
 
-        <section class="cart">
-            <h2>🛒 Your Cart</h2>
-            <div id="cartItems">Your cart is empty.</div>
-            <h3 id="total">Total: ₹0.00</h3>
-            <button id="placeOrder">Place Order</button>
-            <p id="message" role="status" aria-live="polite"></p>
+        <div class="cart-count" id="cartCount">🛒 Cart: 0</div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <p class="eyebrow">A Taste of Luxury</p>
+
+            <h1>Food & Dining</h1>
+
+            <p class="luxury-quote">
+                “Luxury is not a place. It is the feeling you take with you.”
+            </p>
+
+            <div class="gold-line"></div>
+
+            <p class="hero-description">
+                Discover delicious dishes prepared with care and served with elegance.
+                <br>
+                From a refreshing morning breakfast to a delightful night dinner.
+            </p>
         </section>
+
+        <div class="container">
+
+            <section>
+                <h2 class="section-heading">Explore Our Menus</h2>
+
+                <p class="section-description">
+                    Select a time of day to explore the available dishes.
+                </p>
+
+                <div class="menu-tabs" role="group" aria-label="Food menu times">
+                    <button class="menu-tab active" data-period="morning"
+                            aria-pressed="true">
+                        <span class="tab-icon">🌅</span>
+                        <span class="tab-name">Morning</span>
+                        <span class="tab-time">Breakfast</span>
+                    </button>
+
+                    <button class="menu-tab" data-period="afternoon"
+                            aria-pressed="false">
+                        <span class="tab-icon">☀️</span>
+                        <span class="tab-name">Afternoon</span>
+                        <span class="tab-time">Lunch</span>
+                    </button>
+
+                    <button class="menu-tab" data-period="evening"
+                            aria-pressed="false">
+                        <span class="tab-icon">🌇</span>
+                        <span class="tab-name">Evening</span>
+                        <span class="tab-time">Snacks</span>
+                    </button>
+
+                    <button class="menu-tab" data-period="night"
+                            aria-pressed="false">
+                        <span class="tab-icon">🌙</span>
+                        <span class="tab-name">Night</span>
+                        <span class="tab-time">Dinner</span>
+                    </button>
+                </div>
+
+                <div class="menu-panel">
+                    <h3 id="menuTitle">Morning Menu</h3>
+
+                    <p id="menuDescription">
+                        Start your day with delicious breakfast favourites.
+                    </p>
+
+                    <div id="menu" class="food-grid">
+                        <p class="loading">Loading menu...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="menu-panel">
+                <h2 class="section-heading">Your Details</h2>
+
+                <p class="section-description">
+                    Enter your details before placing your order.
+                </p>
+
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name *</label>
+                        <input id="customerName" type="text"
+                               placeholder="Enter your full name"
+                               maxlength="100" autocomplete="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderType">Order Type *</label>
+                        <select id="orderType">
+                            <option value="Room Service">Room Service</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Takeaway">Takeaway</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roomNumber">Room Number</label>
+                        <input id="roomNumber" type="text"
+                               placeholder="Enter room number if applicable"
+                               maxlength="20">
+                    </div>
+                </div>
+            </section>
+
+            <section class="menu-panel" id="cartSection">
+                <h2 class="section-heading">Your Shopping Cart</h2>
+
+                <p class="section-description">
+                    Review your selected dishes before placing the order.
+                </p>
+
+                <div id="cartItems" class="cart-list">
+                    <p class="empty-message">Your cart is empty.</p>
+                </div>
+
+                <div class="cart-total">
+                    <span>Total Amount</span>
+                    <span class="total-amount" id="total">₹0.00</span>
+                </div>
+
+                <button class="gold-button place-order" id="placeOrder">
+                    PLACE YOUR ORDER
+                </button>
+
+                <p id="message" role="status" aria-live="polite"></p>
+            </section>
+
+        </div>
     </main>
+
+    <footer class="site-footer">
+        <p><span>GRAND HOTEL</span> — MAKING EVERY MEAL SPECIAL</p>
+        <p style="margin-top: 9px;">Luxury in every detail.</p>
+    </footer>
 
     <script>
         const API = "/api/food";
+
         let menuItems = [];
         let cart = {};
+        let activePeriod = "morning";
 
-        async function loadMenu() {
-            const menuElement = document.getElementById("menu");
-
-            try {
-                const response = await fetch(`${API}/menu`);
-
-                if (!response.ok) {
-                    throw new Error("Could not load menu");
-                }
-
-                menuItems = await response.json();
-
-                menuElement.innerHTML = "";
-
-                if (menuItems.length === 0) {
-                    menuElement.textContent = "No food items available.";
-                    return;
-                }
-
-                menuItems.forEach(item => {
-                    const card = document.createElement("article");
-                    card.className = "food";
-
-                    const name = document.createElement("h3");
-                    name.textContent = item.name;
-
-                    const description = document.createElement("p");
-                    description.textContent =
-                        item.description || item.category || "";
-
-                    const price = document.createElement("p");
-                    price.className = "price";
-                    price.textContent =
-                        `₹${Number(item.price).toFixed(2)}`;
-
-                    const addButton = document.createElement("button");
-                    addButton.textContent = "Add to Cart";
-                    addButton.addEventListener("click", () => addToCart(item.id));
-
-                    card.append(name, description, price, addButton);
-                    menuElement.appendChild(card);
-                });
-            } catch (error) {
-                menuElement.textContent =
-                    "Unable to load menu. Please start the server and refresh.";
+        const periodDetails = {
+            morning: {
+                title: "Morning Menu",
+                description: "Start your day with delicious breakfast favourites.",
+                keywords: [
+                    "breakfast", "morning", "idli", "dosa", "vada",
+                    "poori", "puri", "upma", "pongal", "omelette"
+                ]
+            },
+            afternoon: {
+                title: "Afternoon Menu",
+                description: "Enjoy a satisfying lunch with our meal specials.",
+                keywords: [
+                    "lunch", "afternoon", "meals", "thali", "rice",
+                    "biryani", "dal", "curry", "chapati", "roti",
+                    "pulao", "paneer"
+                ]
+            },
+            evening: {
+                title: "Evening Menu",
+                description: "Relax with tasty snacks and refreshing beverages.",
+                keywords: [
+                    "evening", "snack", "starter", "samosa", "pakoda",
+                    "pakora", "sandwich", "noodles", "tea", "coffee",
+                    "juice", "burger", "fries", "manchurian"
+                ]
+            },
+            night: {
+                title: "Night Menu",
+                description: "End your day with a delightful dinner.",
+                keywords: [
+                    "dinner", "night", "biryani", "roti", "chapati",
+                    "naan", "paneer", "chicken", "fish", "curry",
+                    "fried rice", "parotta"
+                ]
             }
+        };
+
+        const menuElement = document.getElementById("menu");
+        const cartElement = document.getElementById("cartItems");
+        const messageElement = document.getElementById("message");
+
+        function money(amount) {
+            return "₹" + Number(amount).toFixed(2);
         }
 
-        function addToCart(id) {
-            const item = menuItems.find(food => food.id === id);
-            if (!item) return;
-
-            if (!cart[id]) {
-                cart[id] = { ...item, quantity: 0 };
-            }
-
-            cart[id].quantity++;
-            renderCart();
-        }
-
-        function changeQuantity(id, change) {
-            if (!cart[id]) return;
-
-            cart[id].quantity += change;
-
-            if (cart[id].quantity <= 0) {
-                delete cart[id];
-            }
-
-            renderCart();
-        }
-
-        function renderCart() {
-            const cartElement = document.getElementById("cartItems");
-            cartElement.innerHTML = "";
-
-            const items = Object.values(cart);
-
-            if (items.length === 0) {
-                cartElement.textContent = "Your cart is empty.";
-            }
-
-            let total = 0;
-
-            items.forEach(item => {
-                total += Number(item.price) * item.quantity;
-
-                const row = document.createElement("div");
-                row.className = "cart-item";
-
-                const details = document.createElement("span");
-                details.textContent =
-                    `${item.name} × ${item.quantity} — ₹${
-                        (Number(item.price) * item.quantity).toFixed(2)
-                    }`;
-
-                const controls = document.createElement("div");
-
-                const minus = document.createElement("button");
-                minus.textContent = "−";
-                minus.setAttribute("aria-label", `Remove one ${item.name}`);
-                minus.addEventListener("click", () =>
-                    changeQuantity(item.id, -1)
-                );
-
-                const plus = document.createElement("button");
-                plus.textContent = "+";
-                plus.setAttribute("aria-label", `Add one ${item.name}`);
-                plus.addEventListener("click", () =>
-                    changeQuantity(item.id, 1)
-                );
-
-                controls.append(minus, plus);
-                row.append(details, controls);
-                cartElement.appendChild(row);
-            });
-
-            document.getElementById("total").textContent =
-                `Total: ₹${total.toFixed(2)}`;
-        }
-
-        document.getElementById("placeOrder").addEventListener("click", async () => {
-            const message = document.getElementById("message");
-            const customerName =
-                document.getElementById("customerName").value.trim();
-            const orderType =
-                document.getElementById("orderType").value;
-            const roomNumber =
-                document.getElementById("roomNumber").value.trim();
-
-            const items = Object.values(cart).map(item => ({
-                food_id: item.id,
-                quantity: item.quantity
-            }));
-
-            message.textContent = "";
-
-            if (!customerName) {
-                message.textContent = "Please enter your name.";
-                return;
-            }
-
-            if (items.length === 0) {
-                message.textContent = "Please add food to your cart.";
-                return;
-            }
-
-            if (orderType === "Room Service" && !roomNumber) {
-                message.textContent =
-                    "Please enter your room number for room service.";
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API}/orders`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        customer_name: customerName,
-                        room_number: roomNumber,
-                        order_type: orderType,
-                        items: items
-                    })
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || "Order failed.");
-                }
-
-                message.textContent =
-                    `Order placed successfully! Order ID: ${
-                        result.orderId ?? result.id ?? "Confirmed"
-                    }`;
-
-                cart = {};
-                renderCart();
-            } catch (error) {
-                message.textContent =
-                    error.message || "Unable to place order. Please try again.";
-            }
-        });
-
-        loadMenu();
-    </script>
-</body>
-</html>
-
+        function getFoodText(item) {
+            return [
+                item.name || "",
+                item.category || "",
+                item.description || ""
+            ].join(" ")
