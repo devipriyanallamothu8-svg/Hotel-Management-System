@@ -1,1 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GrandVista | Book Your Stay</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #071525;
+    color: white;
+    font-family: Montserrat, sans-serif;
+}
+
+.sidebar {
+    position: fixed;
+    width: 240px;
+    height: 100vh;
+    background: #06172b;
+    border-right: 1px solid #34445a;
+    padding: 35px 20px;
+}
+
+.logo {
+    text-align: center;
+    font-family: 'Cormorant Garamond';
+    color: #e5c46b;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.menu a {
+    display: block;
+    padding: 14px;
+    color: #cbd2da;
+    text-decoration: none;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.menu a:hover,
+.menu .active {
+    color: #e5c46b;
+    background: rgba(212,175,55,.12);
+}
+
+.main {
+    margin-left: 240px;
+    padding: 40px;
+}
+
+.hero {
+    padding: 55px;
+    margin-bottom: 30px;
+
+    background:
+        linear-gradient(rgba(4,17,34,.75), rgba(4,17,34,.85)),
+        url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+}
+
+.hero h1 {
+    font-family: 'Cormorant Garamond';
+    font-size: 60px;
+    color: white;
+}
+
+.hero p {
+    color: #e5c46b;
+    font-family: 'Cormorant Garamond';
+    font-style: italic;
+    font-size: 25px;
+}
+
+.booking-form {
+    background: #0b2038;
+    padding: 25px;
+    border: 1px solid rgba(212,175,55,.25);
+    margin-bottom: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 13px;
+    background: #071525;
+    border: 1px solid #33465c;
+    color: white;
+}
+
+label {
+    display: block;
+    color: #d4af37;
+    font-size: 10px;
+    margin-bottom: 7px;
+}
+
+.book-button {
+    margin-top: 19px;
+    padding: 13px;
+    background: #d4af37;
+    color: #071525;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.room-title {
+    font-family: 'Cormorant Garamond';
+    color: #e5c46b;
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 22px;
+}
+
+.room-card {
+    background: #0b2038;
+    border: 1px solid rgba(212,175,55,.22);
+    overflow: hidden;
+}
+
+.room-card.selected {
+    border: 2px solid #d4af37;
+}
+
+.room-image {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.room-info {
+    padding: 20px;
+}
+
+.room-info h2 {
+    font-family: 'Cormorant Garamond';
+    font-size: 29px;
+}
+
+.room-info p {
+    color: #aeb7c1;
+    font-size: 12px;
+    margin: 7px 0;
+}
+
+.room-price {
+    color: #e5c46b !important;
+    font-size: 16px !important;
+}
+
+.select-room {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid #d4af37;
+    color: #e5c46b;
+    cursor: pointer;
+}
+
+.select-room:hover {
+    background: #d4af37;
+    color: #071525;
+}
+
+.selected-text {
+    margin-top: 20px;
+    color: #e5c46b;
+}
+
+@media(max-width:1000px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .room-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width:600px) {
+
+    .form-grid,
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main {
+        padding: 20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">GrandVista</div>
+
+<div class="menu">
+
+<a href="dashboard.html">Dashboard</a>
+<a href="rooms.html">Rooms</a>
+<a href="customers.html">Customers</a>
+<a class="active" href="booking.html">Bookings</a>
+<a href="checkin-checkout.html">Check-In / Check-Out</a>
+<a href="billing.html">Billing</a>
+
+</div>
+
+</div>
+
+
+<div class="main">
+
+<div class="hero">
+
+<h1>Book Your Stay</h1>
+
+<p>
+“Your perfect room is waiting for you.”
+</p>
+
+</div>
+
+
+<div class="booking-form">
+
+<div class="form-grid">
+
+<div>
+
+<label>GUEST</label>
+
+<select id="customer"></select>
+
+</div>
+
+
+<div>
+
+<label>CHECK-IN</label>
+
+<input
+type="date"
+id="checkin"
+>
+
+</div>
+
+
+<div>
+
+<label>CHECK-OUT</label>
+
+<input
+type="date"
+id="checkout"
+>
+
+</div>
+
+
+<div>
+
+<label>SELECTED ROOM</label>
+
+<input
+id="selectedRoom"
+readonly
+placeholder="Choose a room below"
+>
+
+</div>
+
+</div>
+
+<button
+class="book-button"
+onclick="createBooking()"
+>
+CONFIRM BOOKING
+</button>
+
+<div
+class="selected-text"
+id="message"
+></div>
+
+</div>
+
+
+<div class="room-title">
+Choose Your Room
+</div>
+
+
+<div
+class="room-grid"
+id="roomGrid"
+></div>
+
+</div>
+
+
+<script>
+
+if(localStorage.getItem("adminLoggedIn") !== "true") {
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+let rooms = [];
+
+let selectedRoomId = null;
+
+
+const images = [
+
+"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=85",
+
+"https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=85",
+
+"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=85",
+
+"https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1000&q=85"
+
+];
+
+
+async function loadCustomers() {
+
+    const response =
+        await fetch("/api/customers");
+
+    const customers =
+        await response.json();
+
+    const select =
+        document.getElementById(
+            "customer"
+        );
+
+    select.innerHTML =
+        `<option value="">
+        Select Guest
+        </option>`;
+
+    customers.forEach(customer => {
+
+        select.innerHTML += `
+
+            <option value="${customer.id}">
+                ${customer.name} - ${customer.phone}
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+async function loadRooms() {
+
+    const response =
+        await fetch("/api/rooms");
+
+    rooms =
+        await response.json();
+
+    const grid =
+        document.getElementById(
+            "roomGrid"
+        );
+
+    grid.innerHTML = "";
+
+    rooms.forEach((room,index) => {
+
+        const image =
+            images[index % images.length];
+
+        const available =
+            room.status === "Available";
+
+
+        grid.innerHTML += `
+
+            <div
+                class="room-card"
+                id="room-${room.id}"
+            >
+
+                <img
+                    class="room-image"
+                    src="${image}"
+                    alt="Luxury Hotel Room"
+                >
+
+                <div class="room-info">
+
+                    <h2>
+                        ${room.room_type}
+                    </h2>
+
+                    <p>
+                        Room ${room.room_number}
+                    </p>
+
+                    <p class="room-price">
+                        ₹${room.price} / night
+                    </p>
+
+                    <p>
+                        Status: ${room.status}
+                    </p>
+
+                    ${
+                        available
+                        ?
+                        `<button
+                            class="select-room"
+                            onclick="selectRoom(${room.id})"
+                        >
+                            SELECT THIS ROOM
+                        </button>`
+                        :
+                        `<button
+                            class="select-room"
+                            disabled
+                        >
+                            CURRENTLY BOOKED
+                        </button>`
+                    }
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+function selectRoom(id) {
+
+    selectedRoomId = id;
+
+    document
+        .querySelectorAll(".room-card")
+        .forEach(card =>
+            card.classList.remove(
+                "selected"
+            )
+        );
+
+    document
+        .getElementById(
+            "room-" + id
+        )
+        .classList.add(
+            "selected"
+        );
+
+
+    const room =
+        rooms.find(
+            r => r.id === id
+        );
+
+
+    document.getElementById(
+        "selectedRoom"
+    ).value =
+        "Room " +
+        room.room_number +
+        " - " +
+        room.room_type;
+
+}
+
+
+async function createBooking() {
+
+    const customerId =
+        document.getElementById(
+            "customer"
+        ).value;
+
+    const checkin =
+        document.getElementById(
+            "checkin"
+        ).value;
+
+    const checkout =
+        document.getElementById(
+            "checkout"
+        ).value;
+
+
+    if(
+        !customerId ||
+        !selectedRoomId ||
+        !checkin ||
+        !checkout
+    ) {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "Please select guest, room and dates.";
+
+        return;
+
+    }
+
+
+    const response =
+        await fetch("/api/bookings", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+
+                customer_id:
+                    customerId,
+
+                room_id:
+                    selectedRoomId,
+
+                check_in:
+                    checkin,
+
+                check_out:
+                    checkout
+
+            })
+
+        });
+
+
+    const data =
+        await response.json();
+
+
+    if(response.ok) {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "✓ Booking confirmed successfully.";
+
+        selectedRoomId = null;
+
+        document.getElementById(
+            "selectedRoom"
+        ).value = "";
+
+        loadRooms();
+
+    } else {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            data.error;
+
+    }
+
+}
+
+
+loadCustomers();
+
+loadRooms();
+
+</script>
+
+</body>
+</html>
