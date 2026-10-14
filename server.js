@@ -7,6 +7,7 @@ const roomRoutes = require("./routes/rooms");
 const customerRoutes = require("./routes/customers");
 const bookingRoutes = require("./routes/bookings");
 const dashboardRoutes = require("./routes/dashboard");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/bookings", bookingRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/admin", adminRoutes);
 
 
 const PORT = 3000;
