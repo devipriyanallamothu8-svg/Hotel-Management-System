@@ -1,1 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GrandVista | Check-In & Check-Out</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #071525;
+    color: white;
+    font-family: Montserrat, sans-serif;
+}
+
+.sidebar {
+    position: fixed;
+    width: 240px;
+    height: 100vh;
+    background: #06172b;
+    border-right: 1px solid #34445a;
+    padding: 35px 20px;
+}
+
+.logo {
+    text-align: center;
+    font-family: 'Cormorant Garamond';
+    color: #e5c46b;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.menu a {
+    display: block;
+    padding: 14px;
+    color: #cbd2da;
+    text-decoration: none;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.menu a:hover,
+.menu .active {
+    color: #e5c46b;
+    background: rgba(212,175,55,.12);
+}
+
+.main {
+    margin-left: 240px;
+    padding: 40px;
+}
+
+h1 {
+    font-family: 'Cormorant Garamond';
+    font-size: 48px;
+    color: #e5c46b;
+}
+
+.subtitle {
+    color: #9da8b5;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.table-box {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0b2038;
+}
+
+th {
+    color: #d4af37;
+    font-size: 10px;
+    padding: 15px;
+    text-align: left;
+}
+
+td {
+    padding: 15px;
+    font-size: 11px;
+    border-top: 1px solid #263a50;
+    color: #d0d5db;
+}
+
+button {
+    padding: 9px 13px;
+    border: 1px solid #d4af37;
+    background: transparent;
+    color: #e5c46b;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #d4af37;
+    color: #071525;
+}
+
+.completed {
+    color: #7ce0ae;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">GrandVista</div>
+
+<div class="menu">
+
+<a href="dashboard.html">Dashboard</a>
+<a href="rooms.html">Rooms</a>
+<a href="customers.html">Customers</a>
+<a href="booking.html">Bookings</a>
+<a class="active" href="checkin-checkout.html">Check-In / Check-Out</a>
+<a href="billing.html">Billing</a>
+
+</div>
+
+</div>
+
+
+<div class="main">
+
+<h1>Guest Journey</h1>
+
+<div class="subtitle">
+Manage arrivals, stays and departures
+</div>
+
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>GUEST</th>
+<th>PHONE</th>
+<th>ROOM</th>
+<th>TYPE</th>
+<th>CHECK-IN</th>
+<th>CHECK-OUT</th>
+<th>AMOUNT</th>
+<th>STATUS</th>
+<th>ACTION</th>
+
+</tr>
+
+</thead>
+
+<tbody id="bookingTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<script>
+
+if(localStorage.getItem("adminLoggedIn") !== "true") {
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+async function loadBookings() {
+
+    const response =
+        await fetch("/api/bookings");
+
+    const bookings =
+        await response.json();
+
+    const table =
+        document.getElementById(
+            "bookingTable"
+        );
+
+    table.innerHTML = "";
+
+
+    bookings.forEach(booking => {
+
+        let action = "";
+
+
+        if(booking.status === "Booked") {
+
+            action = `
+
+                <button
+                    onclick="checkIn(${booking.id})"
+                >
+                    CHECK-IN
+                </button>
+
+            `;
+
+        }
+
+        else if(
+            booking.status === "Checked-In"
+        ) {
+
+            action = `
+
+                <button
+                    onclick="checkOut(${booking.id})"
+                >
+                    CHECK-OUT
+                </button>
+
+            `;
+
+        }
+
+        else {
+
+            action =
+                `<span class="completed">
+                    Completed
+                </span>`;
+
+        }
+
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${booking.customer_name}</td>
+
+                <td>${booking.phone}</td>
+
+                <td>${booking.room_number}</td>
+
+                <td>${booking.room_type}</td>
+
+                <td>${booking.check_in}</td>
+
+                <td>${booking.check_out}</td>
+
+                <td>
+                    ₹${booking.total_amount}
+                </td>
+
+                <td>${booking.status}</td>
+
+                <td>${action}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+async function checkIn(id) {
+
+    const response =
+        await fetch(
+            "/api/bookings/" +
+            id +
+            "/checkin",
+            {
+                method: "PUT"
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    alert(data.message || data.error);
+
+    loadBookings();
+
+}
+
+
+async function checkOut(id) {
+
+    const response =
+        await fetch(
+            "/api/bookings/" +
+            id +
+            "/checkout",
+            {
+                method: "PUT"
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    alert(data.message || data.error);
+
+    loadBookings();
+
+}
+
+
+loadBookings();
+
+</script>
+
+</body>
+</html>
