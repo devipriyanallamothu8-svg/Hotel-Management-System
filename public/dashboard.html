@@ -1,1 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GrandVista Hotels | Luxury Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        /* =========================================
+           GLOBAL
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            font-family: "Montserrat", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(212,175,55,0.08),
+                    transparent 30%
+                ),
+                #f5f2ea;
+
+            color: #0a1b32;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 270px;
+
+            height: 100vh;
+
+            padding: 28px 18px;
+
+            background:
+                linear-gradient(
+                    160deg,
+                    #020b18,
+                    #071a33 50%,
+                    #0b2948
+                );
+
+            color: white;
+
+            box-shadow:
+                12px 0 45px
+                rgba(0,0,0,0.18);
+
+            overflow-y: auto;
+
+            z-index: 100;
+        }
+
+
+        .sidebar::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #d4af37,
+                    transparent
+                );
+        }
+
+
+        .sidebar::after {
+
+            content: "";
+
+            position: absolute;
+
+            right: 0;
+            top: 0;
+
+            width: 2px;
+
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    #d4af37 35%,
+                    #f1d67a 50%,
+                    #d4af37 65%,
+                    transparent
+                );
+        }
+
+
+        /* =========================================
+           BRAND
+        ========================================= */
+
+        .brand {
+
+            text-align: center;
+
+            padding:
+                8px 5px 25px;
+
+            border-bottom:
+                1px solid
+                rgba(212,175,55,0.20);
+
+            margin-bottom: 25px;
+        }
+
+
+        .brand-logo {
+
+            width: 78px;
+
+            height: 78px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #f4dc88,
+                    #d4af37 55%,
+                    #9c7617
+                );
+
+            color: #071a33;
+
+            font-size: 38px;
+
+            border:
+                3px solid
+                rgba(255,255,255,0.18);
+
+            box-shadow:
+                0 0 0 5px
+                rgba(212,175,55,0.08),
+                0 0 35px
+                rgba(212,175,55,0.25);
+        }
+
+
+        .brand h1 {
+
+            margin-top: 15px;
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 31px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            color: #f4dc88;
+        }
+
+
+        .brand-line {
+
+            width: 45px;
+
+            height: 2px;
+
+            margin: 8px auto;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #d4af37,
+                    transparent
+                );
+        }
+
+
+        .brand p {
+
+            font-size: 9px;
+
+            letter-spacing: 2.5px;
+
+            color: #aebdcd;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        .nav-title {
+
+            font-size: 9px;
+
+            letter-spacing: 2.5px;
+
+            color: #b99635;
+
+            margin:
+                22px 12px 9px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .sidebar a {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding:
+                13px 15px;
+
+            margin:
+                5px 0;
+
+            border-radius: 9px;
+
+            color: #cbd6e2;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            border:
+                1px solid
+                transparent;
+
+            transition:
+                all 0.3s ease;
+        }
+
+
+        .sidebar a .nav-icon {
+
+            width: 24px;
+
+            text-align: center;
+
+            font-size: 17px;
+        }
+
+
+        .sidebar a:hover {
+
+            color: #f4dc88;
+
+            background:
+                rgba(212,175,55,0.08);
+
+            border-color:
+                rgba(212,175,55,0.20);
+
+            transform:
+                translateX(4px);
+        }
+
+
+        .sidebar a.active {
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #d4af37,
+                    #f0d778,
+                    #b8860b
+                );
+
+            color: #071a33;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 8px 25px
+                rgba(212,175,55,0.20);
+        }
+
+
+        .sidebar a.active::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -18px;
+
+            width: 3px;
+
+            height: 65%;
+
+            border-radius: 0 5px 5px 0;
+
+            background: #f4dc88;
+        }
+
+
+        /* =========================================
+           LOGOUT
+        ========================================= */
+
+        .logout-btn {
+
+            width: 100%;
+
+            margin-top: 28px;
+
+            padding: 13px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid
+                rgba(212,175,55,0.20);
+
+            background:
+                rgba(255,255,255,0.04);
+
+            color: #dce4ed;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .logout-btn:hover {
+
+            background: #701c25;
+
+            border-color: #a62b35;
+
+            color: white;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .main {
+
+            margin-left: 270px;
+
+            padding: 35px 40px 50px;
+
+            max-width: 1800px;
+        }
+
+
+        /* =========================================
+           TOP BAR
+        ========================================= */
+
+        .topbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 30px;
+        }
+
+
+        .welcome small {
+
+            display: block;
+
+            color: #a17b18;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 2.5px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 5px;
+        }
+
+
+        .welcome h2 {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 42px;
+
+            line-height: 1;
+
+            color: #071a33;
+
+            font-weight: 700;
+        }
+
+
+        .welcome h2 span {
+
+            color: #b8860b;
+        }
+
+
+        .welcome p {
+
+            margin-top: 9px;
+
+            font-size: 12px;
+
+            color: #718096;
+        }
+
+
+        .top-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .date-box {
+
+            padding:
+                12px 18px;
+
+            border:
+                1px solid
+                #ddd3b7;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.70);
+
+            color: #536174;
+
+            font-size: 11px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(7,26,51,0.04);
+        }
+
+
+        .refresh-btn {
+
+            border: none;
+
+            padding:
+                12px 18px;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0a1b32,
+                    #12385c
+                );
+
+            color: #f4dc88;
+
+            font-family: inherit;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px
+                rgba(7,26,51,0.15);
+
+            transition: 0.3s;
+        }
+
+
+        .refresh-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(7,26,51,0.22);
+        }
+
+
+        /* =========================================
+           GOLD DIVIDER
+        ========================================= */
+
+        .luxury-divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .luxury-divider::before,
+        .luxury-divider::after {
+
+            content: "";
+
+            height: 1px;
+
+            flex: 1;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #d7c79c
+                );
+        }
+
+
+        .luxury-divider::after {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #d7c79c,
+                    transparent
+                );
+        }
+
+
+        .diamond {
+
+            width: 7px;
+
+            height: 7px;
+
+            background: #d4af37;
+
+            transform: rotate(45deg);
+        }
+
+
+        /* =========================================
+           STAT CARDS
+        ========================================= */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(190px, 1fr)
+                );
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 155px;
+
+            padding: 24px;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #f9f6ed
+                );
+
+            border:
+                1px solid
+                #ded4b9;
+
+            box-shadow:
+                0 10px 30px
+                rgba(7,26,51,0.07);
+
+            transition:
+                transform 0.3s,
+                box-shadow 0.3s;
+        }
+
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #9c7617,
+                    #f4dc88,
+                    #9c7617
+                );
+        }
+
+
+        .card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+
+            height: 100px;
+
+            right: -45px;
+
+            bottom: -45px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(212,175,55,0.07);
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+                0 18px 38px
+                rgba(7,26,51,0.12);
+        }
+
+
+        .card-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+        }
+
+
+        .card-icon {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                #071a33;
+
+            color: #f4dc88;
+
+            font-size: 19px;
+
+            box-shadow:
+                0 6px 15px
+                rgba(7,26,51,0.16);
+        }
+
+
+        .card-symbol {
+
+            font-size: 21px;
+        }
+
+
+        .card h3 {
+
+            margin-top: 19px;
+
+            font-size: 9px;
+
+            letter-spacing: 1.8px;
+
+            color: #8793a2;
+        }
+
+
+        .card p {
+
+            margin-top: 4px;
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 34px;
+
+            font-weight: 700;
+
+            color: #071a33;
+        }
+
+
+        /* =========================================
+           CONTENT GRID
+        ========================================= */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.05fr
+                0.95fr;
+
+            gap: 22px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .panel {
+
+            position: relative;
+
+            background:
+                rgba(255,255,255,0.88);
+
+            border:
+                1px solid
+                #ded4b9;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(7,26,51,0.06);
+
+            overflow: hidden;
+        }
+
+
+        .panel::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #d4af37,
+                    transparent
+                );
+        }
+
+
+        .panel-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+
+        .panel-header h3 {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 24px;
+
+            color: #071a33;
+        }
+
+
+        .panel-header span {
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            color: #a17b18;
+        }
+
+
+        /* =========================================
+           ROOM STATUS
+        ========================================= */
+
+        .room-stats {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+        }
+
+
+        .room-box {
+
+            position: relative;
+
+            padding: 27px 20px;
+
+            border-radius: 13px;
+
+            text-align: center;
+
+            overflow: hidden;
+        }
+
+
+        .room-box::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+
+            height: 90px;
+
+            border-radius: 50%;
+
+            right: -35px;
+
+            bottom: -35px;
+
+            background:
+                rgba(255,255,255,0.35);
+        }
+
+
+        .available {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edf8f1,
+                    #dcefe3
+                );
+
+            border:
+                1px solid
+                #bddbc8;
+
+            color: #17633a;
+        }
+
+
+        .booked {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8df,
+                    #f5e7b5
+                );
+
+            border:
+                1px solid
+                #dfc979;
+
+            color: #876313;
+        }
+
+
+        .room-icon {
+
+            font-size: 25px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .room-box h4 {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 42px;
+
+            line-height: 1;
+        }
+
+
+        .room-box p {
+
+            margin-top: 6px;
+
+            font-size: 9px;
+
+            letter-spacing: 1.5px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           CHART
+        ========================================= */
+
+        .chart-container {
+
+            height: 245px;
+
+            position: relative;
+        }
+
+
+        /* =========================================
+           BOOKINGS TABLE
+        ========================================= */
+
+        .table-container {
+
+            background:
+                rgba(255,255,255,0.90);
+
+            border:
+                1px solid
+                #ded4b9;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(7,26,51,0.06);
+
+            overflow-x: auto;
+        }
+
+
+        .table-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .table-header h3 {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size: 24px;
+
+            color: #071a33;
+        }
+
+
+        .table-header span {
+
+            font-size: 10px;
+
+            color: #8a96a5;
+
+            letter-spacing: 1px;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+                separate;
+
+            border-spacing:
+                0 5px;
+
+            min-width: 750px;
+        }
+
+
+        th {
+
+            padding:
+                12px 13px;
+
+            text-align: left;
+
+            background: #071a33;
+
+            color: #f4dc88;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+            font-weight: 600;
+        }
+
+
+        th:first-child {
+
+            border-radius:
+                7px 0 0 7px;
+        }
+
+
+        th:last-child {
+
+            border-radius:
+                0 7px 7px 0;
+        }
+
+
+        td {
+
+            padding:
+                14px 13px;
+
+            font-size: 11px;
+
+            background:
+                #fbfaf6;
+
+            border-top:
+                1px solid
+                #eee9dc;
+
+            border-bottom:
+                1px solid
+                #eee9dc;
+        }
+
+
+        td:first-child {
+
+            border-left:
+                1px solid
+                #eee9dc;
+
+            border-radius:
+                8px 0 0 8px;
+        }
+
+
+        td:last-child {
+
+            border-right:
+                1px solid
+                #eee9dc;
+
+            border-radius:
+                0 8px 8px 0;
+        }
+
+
+        tbody tr {
+
+            transition: 0.2s;
+        }
+
+
+        tbody tr:hover td {
+
+            background:
+                #fffdf5;
+        }
+
+
+        .customer-name {
+
+            font-weight: 700;
+
+          
