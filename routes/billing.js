@@ -16,8 +16,11 @@ router.get("/", (req, res) => {
             bookings.id AS booking_id,
             customers.name AS customer_name,
             customers.phone,
+            customers.email,
+            customers.address,
             rooms.room_number,
             rooms.room_type,
+            rooms.price,
             bookings.check_in,
             bookings.check_out,
             bookings.total_amount,
@@ -59,6 +62,88 @@ router.get("/", (req, res) => {
 
 
 // ==========================================
+// GET BILL FOR ONE BOOKING
+// ==========================================
+
+router.get("/bill/:bookingId", (req, res) => {
+
+    const bookingId =
+        req.params.bookingId;
+
+
+    const sql = `
+        SELECT
+            bookings.id AS booking_id,
+
+            customers.name AS customer_name,
+            customers.phone,
+            customers.email,
+            customers.address,
+
+            rooms.room_number,
+            rooms.room_type,
+            rooms.price,
+
+            bookings.check_in,
+            bookings.check_out,
+            bookings.total_amount,
+            bookings.status,
+
+            payments.amount AS paid_amount,
+            payments.payment_method,
+            payments.payment_date
+
+        FROM bookings
+
+        JOIN customers
+            ON bookings.customer_id = customers.id
+
+        JOIN rooms
+            ON bookings.room_id = rooms.id
+
+        LEFT JOIN payments
+            ON bookings.id = payments.booking_id
+
+        WHERE bookings.id = ?
+
+        ORDER BY payments.id DESC
+
+        LIMIT 1
+    `;
+
+
+    db.get(
+        sql,
+        [bookingId],
+        (err, row) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    error: err.message
+                });
+
+            }
+
+
+            if (!row) {
+
+                return res.status(404).json({
+                    error: "Bill not found"
+                });
+
+            }
+
+
+            res.json(row);
+
+        }
+    );
+
+});
+
+
+// ==========================================
 // MAKE PAYMENT
 // ==========================================
 
@@ -78,7 +163,8 @@ router.post("/payment", (req, res) => {
     ) {
 
         return res.status(400).json({
-            error: "Please provide booking, amount and payment method"
+            error:
+                "Please provide booking, amount and payment method"
         });
 
     }
@@ -121,9 +207,11 @@ router.post("/payment", (req, res) => {
 
             res.json({
 
-                message: "Payment recorded successfully",
+                message:
+                    "Payment recorded successfully",
 
-                payment_id: this.lastID
+                payment_id:
+                    this.lastID
 
             });
 
