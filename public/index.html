@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>GrandVista Hotels</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            background: #071525;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(3,15,30,.72), rgba(3,15,30,.82)),
+                url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=85")
+                center/cover;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            height: 85px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 7%;
+            border-bottom: 1px solid rgba(212,175,55,.3);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34px;
+            color: #e5c46b;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: #e5c46b;
+        }
+
+        .hero-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .content {
+            max-width: 900px;
+        }
+
+        .small-title {
+            color: #e5c46b;
+            letter-spacing: 5px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(55px, 8vw, 100px);
+            line-height: .9;
+            margin-bottom: 30px;
+        }
+
+        .quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            font-style: italic;
+            color: #f1e3b5;
+            margin-bottom: 40px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            padding: 15px 32px;
+            margin: 8px;
+            text-decoration: none;
+            border: 1px solid #d4af37;
+            color: white;
+            transition: .3s;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .buttons a:first-child {
+            background: #d4af37;
+            color: #071525;
+        }
+
+        .buttons a:hover {
+            transform: translateY(-3px);
+            background: #f0d477;
+            color: #071525;
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            text-align: center;
+            color: #c4cbd4;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        @media(max-width:700px) {
+            nav {
+                padding: 0 25px;
+            }
+
+            nav div:last-child {
+                display: none;
+            }
+
+            .quote {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="hero">
+
+    <nav>
+        <div class="logo">GrandVista</div>
+
+        <div>
+            <a href="index.html">HOME</a>
+            <a href="booking.html">ROOMS</a>
+            <a href="admin-login.html">ADMIN</a>
+        </div>
+    </nav>
+
+    <div class="hero-content">
+
+        <div class="content">
+
+            <div class="small-title">
+                WELCOME TO GRANDVISTA
+            </div>
+
+            <h1>
+                Luxury<br>
+                Redefined
+            </h1>
+
+            <div class="quote">
+                “Where every stay becomes a beautiful memory.”
+            </div>
+
+            <div class="buttons">
+                <a href="booking.html">EXPLORE ROOMS</a>
+                <a href="admin-login.html">ADMIN LOGIN</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-text">
+        GRANDVISTA HOTELS • EXPERIENCE ELEGANCE
+    </div>
+
+</div>
+
+</body>
+</html>
