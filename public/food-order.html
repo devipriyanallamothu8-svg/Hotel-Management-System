@@ -1,1 +1,354 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Food Ordering</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 15px;
+        }
+
+        .details, .cart {
+            background: white;
+            padding: 22px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000012;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .food {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000012;
+        }
+
+        .food h3 {
+            margin-top: 0;
+            color: #172554;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #15803d;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .remove {
+            background: #dc2626;
+        }
+
+        .remove:hover {
+            background: #b91c1c;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        #message {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .cart-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🍽️ Hotel Food Ordering</h1>
+        <p>Choose your favourite food and place your order</p>
+    </header>
+
+    <main class="container">
+        <section class="details">
+            <h2>Customer Details</h2>
+
+            <label for="customerName">Customer Name</label>
+            <input id="customerName" type="text"
+                   placeholder="Enter your name" required>
+
+            <label for="orderType">Order Type</label>
+            <select id="orderType">
+                <option value="Room Service">Room Service</option>
+                <option value="Restaurant">Restaurant</option>
+                <option value="Takeaway">Takeaway</option>
+            </select>
+
+            <label for="roomNumber">Room Number (for room service)</label>
+            <input id="roomNumber" type="text"
+                   placeholder="Enter room number">
+        </section>
+
+        <h2>Our Menu</h2>
+        <div id="menu" class="menu">
+            <p>Loading menu...</p>
+        </div>
+
+        <section class="cart">
+            <h2>🛒 Your Cart</h2>
+            <div id="cartItems">Your cart is empty.</div>
+            <h3 id="total">Total: ₹0.00</h3>
+            <button id="placeOrder">Place Order</button>
+            <p id="message" role="status" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script>
+        const API = "/api/food";
+        let menuItems = [];
+        let cart = {};
+
+        async function loadMenu() {
+            const menuElement = document.getElementById("menu");
+
+            try {
+                const response = await fetch(`${API}/menu`);
+
+                if (!response.ok) {
+                    throw new Error("Could not load menu");
+                }
+
+                menuItems = await response.json();
+
+                menuElement.innerHTML = "";
+
+                if (menuItems.length === 0) {
+                    menuElement.textContent = "No food items available.";
+                    return;
+                }
+
+                menuItems.forEach(item => {
+                    const card = document.createElement("article");
+                    card.className = "food";
+
+                    const name = document.createElement("h3");
+                    name.textContent = item.name;
+
+                    const description = document.createElement("p");
+                    description.textContent =
+                        item.description || item.category || "";
+
+                    const price = document.createElement("p");
+                    price.className = "price";
+                    price.textContent =
+                        `₹${Number(item.price).toFixed(2)}`;
+
+                    const addButton = document.createElement("button");
+                    addButton.textContent = "Add to Cart";
+                    addButton.addEventListener("click", () => addToCart(item.id));
+
+                    card.append(name, description, price, addButton);
+                    menuElement.appendChild(card);
+                });
+            } catch (error) {
+                menuElement.textContent =
+                    "Unable to load menu. Please start the server and refresh.";
+            }
+        }
+
+        function addToCart(id) {
+            const item = menuItems.find(food => food.id === id);
+            if (!item) return;
+
+            if (!cart[id]) {
+                cart[id] = { ...item, quantity: 0 };
+            }
+
+            cart[id].quantity++;
+            renderCart();
+        }
+
+        function changeQuantity(id, change) {
+            if (!cart[id]) return;
+
+            cart[id].quantity += change;
+
+            if (cart[id].quantity <= 0) {
+                delete cart[id];
+            }
+
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartElement = document.getElementById("cartItems");
+            cartElement.innerHTML = "";
+
+            const items = Object.values(cart);
+
+            if (items.length === 0) {
+                cartElement.textContent = "Your cart is empty.";
+            }
+
+            let total = 0;
+
+            items.forEach(item => {
+                total += Number(item.price) * item.quantity;
+
+                const row = document.createElement("div");
+                row.className = "cart-item";
+
+                const details = document.createElement("span");
+                details.textContent =
+                    `${item.name} × ${item.quantity} — ₹${
+                        (Number(item.price) * item.quantity).toFixed(2)
+                    }`;
+
+                const controls = document.createElement("div");
+
+                const minus = document.createElement("button");
+                minus.textContent = "−";
+                minus.setAttribute("aria-label", `Remove one ${item.name}`);
+                minus.addEventListener("click", () =>
+                    changeQuantity(item.id, -1)
+                );
+
+                const plus = document.createElement("button");
+                plus.textContent = "+";
+                plus.setAttribute("aria-label", `Add one ${item.name}`);
+                plus.addEventListener("click", () =>
+                    changeQuantity(item.id, 1)
+                );
+
+                controls.append(minus, plus);
+                row.append(details, controls);
+                cartElement.appendChild(row);
+            });
+
+            document.getElementById("total").textContent =
+                `Total: ₹${total.toFixed(2)}`;
+        }
+
+        document.getElementById("placeOrder").addEventListener("click", async () => {
+            const message = document.getElementById("message");
+            const customerName =
+                document.getElementById("customerName").value.trim();
+            const orderType =
+                document.getElementById("orderType").value;
+            const roomNumber =
+                document.getElementById("roomNumber").value.trim();
+
+            const items = Object.values(cart).map(item => ({
+                food_id: item.id,
+                quantity: item.quantity
+            }));
+
+            message.textContent = "";
+
+            if (!customerName) {
+                message.textContent = "Please enter your name.";
+                return;
+            }
+
+            if (items.length === 0) {
+                message.textContent = "Please add food to your cart.";
+                return;
+            }
+
+            if (orderType === "Room Service" && !roomNumber) {
+                message.textContent =
+                    "Please enter your room number for room service.";
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API}/orders`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        customer_name: customerName,
+                        room_number: roomNumber,
+                        order_type: orderType,
+                        items: items
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || "Order failed.");
+                }
+
+                message.textContent =
+                    `Order placed successfully! Order ID: ${
+                        result.orderId ?? result.id ?? "Confirmed"
+                    }`;
+
+                cart = {};
+                renderCart();
+            } catch (error) {
+                message.textContent =
+                    error.message || "Unable to place order. Please try again.";
+            }
+        });
+
+        loadMenu();
+    </script>
+</body>
+</html>
+
